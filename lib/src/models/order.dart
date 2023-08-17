@@ -6,10 +6,12 @@ enum OrderStatus { confirmed, shipped, delivered }
 /// Helper method to get the order status from String
 extension OrderStatusString on OrderStatus {
   static OrderStatus fromString(String string) {
-    if (string == 'confirmed') return OrderStatus.confirmed;
-    if (string == 'shipped') return OrderStatus.shipped;
-    if (string == 'delivered') return OrderStatus.delivered;
-    throw Exception('Could not parse order status: $string'.hardcoded);
+    return switch (string) {
+      ('confirmed') => OrderStatus.confirmed,
+      ('shipped') => OrderStatus.shipped,
+      ('deliverd') => OrderStatus.delivered,
+      _ => throw Exception('Could not parse order status: $string'.hardcoded),
+    };
   }
 }
 
