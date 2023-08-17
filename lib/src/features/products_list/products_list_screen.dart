@@ -19,18 +19,19 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
   // * This is needed because this page has a search field that the user can
   // * type into.
   final _scrollController = ScrollController();
+  bool _isFabVisible = false;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_dismissOnScreenKeyboard);
-    _scrollController.addListener(_scrollBehavior);
+    _scrollController.addListener(_fabVisibility);
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_dismissOnScreenKeyboard);
-    _scrollController.removeListener(_scrollBehavior);
+    _scrollController.removeListener(_fabVisibility);
     super.dispose();
   }
 
@@ -42,11 +43,20 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     }
   }
 
-  _scrollBehavior() {
-    if (_scrollController.position.atEdge) {
-      final isTop = _scrollController.position.pixels == 0.0;
-      isTop ? _scrollDown() : _scrollUp();
+  void _fabVisibility() {
+    if (_scrollController.offset > 50) {
+      setState(() => _isFabVisible = true);
+    } else {
+      setState(() => _isFabVisible = false);
     }
+  }
+
+  void _scrollUp() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeIn,
+    );
   }
 
   @override
@@ -66,31 +76,15 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _scrollBehavior,
-        backgroundColor: Colors.grey.shade300,
-        child: const Icon(
-          Icons.arrow_upward,
-        ),
-      ),
-    );
-  }
-
-  void _scrollUp() {
-    const start = 0.0;
-    _scrollController.animateTo(
-      start,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
-  }
-
-  void _scrollDown() {
-    final end = _scrollController.position.maxScrollExtent;
-    _scrollController.animateTo(
-      end,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeIn,
+      floatingActionButton: _isFabVisible
+          ? FloatingActionButton(
+              onPressed: _scrollUp,
+              backgroundColor: Colors.grey.shade300,
+              child: const Icon(
+                Icons.arrow_upward,
+              ),
+            )
+          : null,
     );
   }
 }
