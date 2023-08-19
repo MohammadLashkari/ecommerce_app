@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ecommerce_app/src/app.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
   // * For more info on error handling, see:
@@ -10,6 +11,8 @@ void main() async {
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      // turn off the # in the URLs on the web
+      usePathUrlStrategy();
       // * Entry point of the app
       runApp(const MyApp());
 

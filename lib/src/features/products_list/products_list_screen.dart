@@ -44,7 +44,8 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
   }
 
   void _fabVisibility() {
-    if (_scrollController.offset > 50) {
+    const offset = 1000.0;
+    if (_scrollController.offset > offset) {
       setState(() => _isFabVisible = true);
     } else {
       setState(() => _isFabVisible = false);
@@ -52,8 +53,9 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
   }
 
   void _scrollUp() {
+    const start = 0.0;
     _scrollController.animateTo(
-      0,
+      start,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeIn,
     );
